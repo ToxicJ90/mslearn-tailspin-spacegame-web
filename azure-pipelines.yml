@@ -4,30 +4,29 @@
 # https://docs.microsoft.com/azure/devops/pipelines/languages/dotnet-core
 
 trigger:
-- master'*'
+- '*'
 
 pool:
-  vmImage: 'windows-latest'
+  vmImage: 'ubuntu-16.04'
+  demands:
   - npm
 
 variables:
-  solution: '**/*.sln'
-  buildPlatform: 'Any CPU'
   buildConfiguration: 'Release'
 
 steps:
 - task: UseDotNet@2
-displayName: 'Use .NET Core SDK 3.1.100'
-inputs:
-    packageType:SDK
+  displayName: 'Use .NET Core SDK 3.1.100'
+  inputs:
+    packageType: sdk
     version: 3.1.100
 
 - task: Npm@1
-displayName: 'Runnpm install'
+  displayName: 'Run npm install'
   inputs:
-    resverbose: false 
+    verbose: false
 
-    - script: './node_modules/.bin/node-sass Tailspin.SpaceGame.Web/wwwroot --output Tailspin.SpaceGame.Web/wwwroot'
+- script: './node_modules/.bin/node-sass Tailspin.SpaceGame.Web/wwwroot --output Tailspin.SpaceGame.Web/wwwroot'
   displayName: 'Compile Sass assets'
 
 - task: gulp@1
